@@ -1,0 +1,19 @@
+# This example composition creates a subnet inside an existing VPC.
+
+composition
+
+import Fugue.AWS as AWS
+import Fugue.AWS.EC2 as EC2
+
+# Insert the AWS ID of an existing VPC below, or replace this value
+# with a new Fugue.AWS.EC2.Vpc value.
+existingVpc: EC2.Vpc.external("vpc-1234abcd", AWS.Us-west-2)
+
+#########################
+# NETWORKS
+#########################
+
+public-10-0-1-0: EC2.Subnet({
+  cidrBlock: '10.0.1.0/24',
+  vpc: existingVpc
+})
