@@ -13,7 +13,7 @@ existingVpc: EC2.Vpc.external("vpc-1234abcd", AWS.Us-west-2)
 # NETWORKS
 #########################
 
-public-10-0-1-0: EC2.Subnet({
+public-10-0-1-0: EC2.Subnet.new {
   cidrBlock: '10.0.1.0/24',
   vpc: existingVpc
-})
+}
