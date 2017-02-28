@@ -1,0 +1,20 @@
+# This example composition creates a subnet inside a new VPC.
+
+composition
+
+import Fugue.AWS as AWS
+import Fugue.AWS.EC2 as EC2
+
+#########################
+# NETWORKS
+#########################
+
+public-10-0-1-0: EC2.Subnet.new {
+  cidrBlock: '10.0.1.0/24',
+  vpc: exampleVpc
+}
+
+exampleVpc: EC2.Vpc.new {
+  cidrBlock: "10.0.0.0/16",
+  region: AWS.Us-west-2,
+}
