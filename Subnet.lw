@@ -7,7 +7,7 @@ import Fugue.AWS.EC2 as EC2
 
 # Insert the AWS ID of an existing VPC below, or replace this value
 # with a new Fugue.AWS.EC2.Vpc value.
-existingVpc: EC2.Vpc.external("vpc-1234abcd", AWS.Us-west-2)
+exampleVpc: EC2.Vpc.external("vpc-1234abcd", AWS.Us-west-2)
 
 #########################
 # NETWORKS
@@ -15,5 +15,17 @@ existingVpc: EC2.Vpc.external("vpc-1234abcd", AWS.Us-west-2)
 
 public-10-0-1-0: EC2.Subnet.new {
   cidrBlock: '10.0.1.0/24',
-  vpc: existingVpc
+  vpc: exampleVpc
+}
+
+# Same behavior as the default ACL for the VPC, but explicit in the Ludwig.
+myDefaultAcl: EC2.NetworkAcl.new {
+  vpc: exampleVpc,
+  entries: [
+    # Allows inbound HTTP traffic from anywhere.
+    EC2.NetworkAcl.Entry.allowInboundPorts {ruleNumber: 100, protocol: EC2.Protocol.All, from: 0, to: 65535},
+    # Allows outbound HTTP traffic to anywhere.
+    EC2.NetworkAcl.Entry.allowOutboundPorts {ruleNumber: 100, protocol: EC2.Protocol.All, from: 0, to: 65535},
+  ],
+  associations: [public-10-0-1-0],
 }
